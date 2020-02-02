@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  h3#id
+  h3#first_name
+  h3#last_name
+  h3#email
+block scripts
+  script.
+    $(() => {
+      let API_URL = 'https://reqres.in/api/users/'
+      let i = 1;
+      setInterval(() => {
+        getUser(i++)
+      }, 5000)
+
+      const getUser = function(user_id) {
+        fetch(API_URL + user_id).then(response => {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+            return;
+          }
+
+          response.json().then(data => {
+            console.log(data);
+            $('#id').text('Id : ' + data.data.id)
+            $('#first_name').text('First name : ' + data.data.first_name)
+            $('#last_name').text('Last name : ' + data.data.last_name)
+            $('#email').text('Email : ' + data.data.email)
+          });
+        }).catch(function(err) {
+          console.log('Fetch Error :-S', err);
+        });
+      }
+    })

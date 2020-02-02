@@ -1,0 +1,105 @@
+extends layout
+
+block content
+	.container
+		.row.row-cols-1.row-cols-md-3.text-white
+			.col.mb-4
+				.card-wrapper
+					.card.currency_card.h-100
+						.card-body.bg-primary
+							.currency.dollar.align-items-center.d-flex.justify-content-center
+								| 0
+						.card-footer.bg-success
+							.currency_icons.align-items-center.d-flex.justify-content-center
+								i.fas.fa-dollar-sign
+			.col.mb-4
+				.card-wrapper
+					.card.currency_card.h-100
+						.card-body.bg-primary
+							.currency.euro.align-items-center.d-flex.justify-content-center
+								| 0
+						.card-footer.bg-success
+							.currency_icons.align-items-center.d-flex.justify-content-center
+								i.fas.fa-euro-sign
+			.col.mb-4
+				.card-wrapper
+					.card.currency_card.h-100
+						.card-body.bg-primary
+							.currency.rupee.align-items-center.d-flex.justify-content-center
+								| 0
+						.card-footer.bg-success
+							.currency_icons.align-items-center.d-flex.justify-content-center
+								i.fas.fa-rupee-sign
+	.container(style="margin-top: 10%")
+		.row
+			.col.md-6
+				.form-group
+					input#left.form-control(type="text" disabled)
+			.col.md-6
+				.form-group
+					input#right.form-control(type="text" disabled)
+	.container.text-center
+		p.error(style="color:red") Some error occurred, please try again later
+block scripts
+	script.
+		$(() => {
+			//- $.fn.visible = function(partial) {
+    
+			//- 	var $t            = $(this),
+			//- 			$w            = $(window),
+			//- 			viewTop       = $w.scrollTop(),
+			//- 			viewBottom    = viewTop + $w.height(),
+			//- 			_top          = $t.offset().top,
+			//- 			_bottom       = _top + $t.height(),
+			//- 			compareTop    = partial === true ? _bottom : _top,
+			//- 			compareBottom = partial === true ? _top : _bottom;
+			
+			//- 	return ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+		
+			//- };
+			//- //- $(window).load(() => {
+			//- 	$('.card').each((i, ele) => {
+			//- 		var e = $(ele)
+			//- 		console.log(e)
+			//- 		if(e.visible(true)) {
+			//- 			//- e.addClass('already-visible')
+			//- 			e.addClass('come-in')
+			//- 		}
+			//- 	})
+			//- })
+
+			const API_URL = `http://api.currencylayer.com/live?access_key=${'#{api_key}'}&currencies=USD,EUR,INR`
+			setInterval(() => {
+				getCurrencyDetails();
+			}, 60000);
+
+			const getCurrencyDetails = function() {
+				fetch(API_URL).then(response => {
+					if (response.status !== 200) {
+						console.log('Looks like there was a problem. Status Code: ' +
+							response.status);
+						$('.error').show();
+						return;
+					}
+
+					response.json().then(data => {
+						console.log(data);
+						if(data.success === true) {
+							$('.dollar').text(data.quotes.USDUSD)
+							$('.euro').text(data.quotes.USDEUR)
+							$('.rupee').text(data.quotes.USDINR)
+
+							$('#left').val(`1 Dollar = ${(data.quotes.USDUSD/data.quotes.USDEUR).toFixed(2)} Euros`)
+							$('#right').val(`1 Dollar = ${(data.quotes.USDUSD/data.quotes.USDINR).toFixed(2)} Rupees`)
+
+							$('.error').hide();
+						}
+					});
+				}).catch(function(err) {
+					console.log('Fetch Error :-S', err);
+					$('.error').show();
+				});
+			}
+
+			getCurrencyDetails();
+		})

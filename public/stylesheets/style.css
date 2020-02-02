@@ -1,0 +1,51 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.currency_card {
+  height: 30%
+}
+
+.card {
+  border-radius: 20px;
+  padding: 0;
+  border: 0px solid transparent;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
+.card:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.card-body {
+  font-size: 5rem;
+  padding: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: 0px solid transparent;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-footer {
+  font-size: 2rem;
+  padding: 15px;
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
+
+.come-in {
+  transform: translateY(500px);
+  animation: come-in 1.2s ease forwards;
+}
+
+@keyframes come-in {
+  to { transform: translateY(0); }
+}
